@@ -23,5 +23,7 @@ import-module ADDSDeployment
 
 Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$true -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true
 
-New-ADUser -Name "support" -SamAccountName "support" -UserPrincipalName "support@$($FQDN)" -AccountPassword $password -Enabled $true
+$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
+
+New-ADUser -Name "support" -SamAccountName "support" -UserPrincipalName "support@$($FQDN)" -AccountPassword (ConvertTo-SecureString -AsPlainText $plainPassword -Force) -Enabled $true
 Restart-Computer -force
