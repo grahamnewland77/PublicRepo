@@ -8,7 +8,8 @@
 #
 
 param (
-    [string]$FDQN
+    [string]$FDQN,
+    [securestring]$password
 )
 
 $installerPath = "C:\Temp\npp.8.1.9.3.Installer.x64.exe"
@@ -22,4 +23,5 @@ import-module ADDSDeployment
 
 Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$true -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true
 
+New-ADUser -Name "support" -SamAccountName "support" -UserPrincipalName "support@$($FQDN)" -AccountPassword $password -Enabled $true
 Restart-Computer -force
