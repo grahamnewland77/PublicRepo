@@ -17,9 +17,9 @@ Start-Process -FilePath $installerPath -ArgumentList "/S" -Wait
 Remove-Item -Path $installerPath
 
 import-module ServerManager
-install-windowsfeature -name AD-Domain-Services -includeManagementTools
+install-windowsfeature -name AD-Domain-Services,DNS -includeManagementTools
 import-module ADDSDeployment
 
-Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$false -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true
+Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$true -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true
 
 Restart-Computer -force
