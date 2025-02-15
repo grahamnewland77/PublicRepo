@@ -9,7 +9,7 @@
 
 param (
     [string]$FDQN,
-    [securestring]$password
+    [string]$password
 )
 
 $plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
