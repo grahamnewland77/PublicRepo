@@ -12,6 +12,8 @@ param (
     [securestring]$password
 )
 
+$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
+
 $installerPath = "C:\Temp\npp.8.1.9.3.Installer.x64.exe"
 Invoke-WebRequest -Uri "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.1.9.3/npp.8.1.9.3.Installer.x64.exe" -OutFile $installerPath
 Start-Process -FilePath $installerPath -ArgumentList "/S" -Wait
@@ -21,9 +23,8 @@ import-module ServerManager
 install-windowsfeature -name AD-Domain-Services,DNS -includeManagementTools
 import-module ADDSDeployment
 
-Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$true -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true
+$securePassword = ConvertTo-SecureString -String $plainPassword -AsPlainText -Force
 
-$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
+Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$false -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true -safeModeAdministratorPassword $securepassword
 
-New-ADUser -Name "support" -SamAccountName "support" -UserPrincipalName "support@$($FQDN)" -AccountPassword (ConvertTo-SecureString -AsPlainText $plainPassword -Force) -Enabled $true
 Restart-Computer -force
