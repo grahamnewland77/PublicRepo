@@ -10,7 +10,10 @@
 param (
     [string]$FDQN,
     [string]$password,
-    [string]$gateway
+    [string]$gateway,
+    [string]$privateIP,
+    [string]$dnsprimary,
+    [string]$dnssecondary
 )
 
 $plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
@@ -24,7 +27,10 @@ import-module ServerManager
 install-windowsfeature -name AD-Domain-Services,DNS -includeManagementTools
 import-module ADDSDeployment
 
-new-route -destinationprefix "0.0.0.0/0" -interfaceindex (get-netadapter).ifindex -NextHop $
+$interface = get-netadapter | where-object { $_.Status -eq "Up" }
+New-NetIPAddress -interfaceIndex $interface.ifindex -IPAddress $privateIP -PrefixLength 24 -DefaultGateway $gateway
+#new-route -destinationprefix "0.0.0.0/0" -interfaceindex (get-netadapter).ifindex -NextHop $gateway
+Set-DnsClientServerAddress -InterfaceIndex $interface.ifIndex -ServerAddresses ($dnsPrimary, $dnsSecondary)
 
 $securePassword = ConvertTo-SecureString -String $plainPassword -AsPlainText -Force
 
