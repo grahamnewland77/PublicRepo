@@ -16,7 +16,7 @@ param (
     [string]$dnssecondary
 )
 
-$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
+#$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
 
 $installerPath = "C:\Temp\npp.8.1.9.3.Installer.x64.exe"
 Invoke-WebRequest -Uri "https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.1.9.3/npp.8.1.9.3.Installer.x64.exe" -OutFile $installerPath
@@ -32,7 +32,7 @@ New-NetIPAddress -interfaceIndex $interface.ifindex -IPAddress $privateIP -Prefi
 #new-route -destinationprefix "0.0.0.0/0" -interfaceindex (get-netadapter).ifindex -NextHop $gateway
 Set-DnsClientServerAddress -InterfaceIndex $interface.ifIndex -ServerAddresses ($dnsPrimary, $dnsSecondary)
 
-$securePassword = ConvertTo-SecureString -String $plainPassword -AsPlainText -Force
+$securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
 
 Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$false -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true -safeModeAdministratorPassword $securepassword
 
