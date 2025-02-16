@@ -7,7 +7,6 @@
 # The script will then be executed once the VM has been deployed.
 #
 
-start-transcript -path c:\customscript.txt
 param (
     [string]$FDQN,
     [string]$password,
@@ -16,7 +15,7 @@ param (
     [string]$dnsprimary,
     [string]$dnssecondary
 )
-
+start-transcript -path c:\customscript.txt
 #$plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
 
 $installerPath = "C:\Temp\npp.8.1.9.3.Installer.x64.exe"
