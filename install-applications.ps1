@@ -7,6 +7,7 @@
 # The script will then be executed once the VM has been deployed.
 #
 
+start-transcript -path c:\customscript.txt
 param (
     [string]$FDQN,
     [string]$password,
@@ -36,4 +37,5 @@ $securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
 
 Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$false -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true -safeModeAdministratorPassword $securepassword
 
+stop-transcript
 Restart-Computer -force
