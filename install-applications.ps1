@@ -32,9 +32,9 @@ New-NetIPAddress -interfaceIndex $interface.ifindex -IPAddress $privateIP -Prefi
 #new-route -destinationprefix "0.0.0.0/0" -interfaceindex (get-netadapter).ifindex -NextHop $gateway
 Set-DnsClientServerAddress -InterfaceIndex $interface.ifIndex -ServerAddresses ($dnsPrimary, $dnsSecondary)
 
-$securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
+#$securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force
 
-Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$false -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true -safeModeAdministratorPassword $securepassword
+#Install-ADDSForest -DomainName $FQDN -InstallDNS -CreateDnsDelegation:$false -DatabasePath "C:\Windows\NTDS" -LogPath "C:\Windows\NTDS" -SysvolPath "C:\Windows\SYSVOL" -Force -NoRebootOnCompletion:$true -safeModeAdministratorPassword $securepassword
 
 stop-transcript
-Restart-Computer -force
+#Restart-Computer -force
