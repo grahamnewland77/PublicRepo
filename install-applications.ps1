@@ -9,7 +9,8 @@
 
 param (
     [string]$FDQN,
-    [string]$password
+    [string]$password,
+    [string]$gateway
 )
 
 $plainPassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password))
@@ -22,6 +23,8 @@ Remove-Item -Path $installerPath
 import-module ServerManager
 install-windowsfeature -name AD-Domain-Services,DNS -includeManagementTools
 import-module ADDSDeployment
+
+new-route -destinationprefix "0.0.0.0/0" -interfaceindex (get-netadapter).ifindex -NextHop $
 
 $securePassword = ConvertTo-SecureString -String $plainPassword -AsPlainText -Force
 
