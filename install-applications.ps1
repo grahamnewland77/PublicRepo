@@ -1,3 +1,7 @@
+# Install-Application.ps1
+#
+# -- Graham Newland <graham@grahamnewland.co.uk>
+#
 # This script needs to be hosted publicly (or in an Azure Storage account), and
 # the path and name of the script need be given in DeployCustomer.ps1, eg:
 #
